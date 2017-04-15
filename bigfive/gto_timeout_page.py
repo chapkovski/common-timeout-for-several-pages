@@ -1,6 +1,6 @@
-from otree.api import Currency as c, currency_range
+
 from . import models, views
-from ._builtin import Page, WaitPage
+from ._builtin import Page
 from .models import Constants
 import time
 from otree.models_concrete import PageTimeout
@@ -45,13 +45,10 @@ class GTOPage(Page):
         if self.get_index_in_sequence() == 'Last':
             return True
 
-    def next_in_sequence(self):
-        return self.get_sequence()[self.get_index_in_sequence()+1]
 
     def is_displayed(self):
         if self.is_first() and 'gto_time_stamp' not in self.player.participant.vars:
             self.player.participant.vars['gto_time_stamp'] = now()
-        leftover = self.player.participant.vars['gto_time_stamp'] + gto_seconds - now()
         expiration_time = self.player.participant.vars['gto_time_stamp'] + gto_seconds
         timeout, created = PageTimeout.objects.get_or_create(
             participant=self.participant,
