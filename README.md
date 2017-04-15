@@ -1,17 +1,38 @@
 # Timeout for several pages in oTree
 The pages that have to have a common timer have to be based not a 'normal'
 Page class, but on GTOPage (which is imported from `gto_timeout_page.py`)
-GTO abbreviation is just from General TimeOut :)
+*GTO abbreviation is just abbreviation of  **G**eneral **T**ime**O**ut* :)
 
 If you use this page and would like to have an overall timeout for several pages
-in `models.py`, in `Constants` you have to set:
-`gto_seconds`. If you forget to set it, then by default the general timeout will be 600 seconds.
+in `models.py` you can set a common timeout for a set of pages:
+```python
+class Constants(BaseConstants):
+    ...
+    gto_seconds = 100
+```
 
-By default general timeout is for one round. If a player starts next next round
-the overall time for a set of GTO pages start over again.
-If you need to have a general timeout for all pages in all rounds, then  insert in
-Constants:
-`GTO_in_round = False`
+If you forget to set it, then by default the general timeout will be 600 seconds.
+
+in `views.py` you should first import `GTOPage`:
+``` python
+from .gto_timeout_page import GTOPage
+```
+and then you define those of your pages that you need to include into one common timeout based on `GTOPage`. For example:
+```python
+class Intro(Page):
+    timeout_seconds = 100
+
+
+class Demographics(GTOPage):
+    general_timeout = True
+    ...
+
+class BigFive(GTOPage):
+    general_timeout = True
+    ...
+```
+So in this example, `Intro` page will be just a normal page, with its own timeout of 100 seconds. Pages `Demographics` and `BigFive` are under the common timeout (if you'd like to exclude temporarily the page from common timeout, set its `general_timeout = False`).
+
 
 since the code for general timeout uses standard oTree functions, it overrides `is_displayed`, `before_next_page`, and `vars_for_template`. If you need to use them for your individual pages under the common timeout, please use instead the following functions:
 

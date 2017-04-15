@@ -53,8 +53,6 @@ class GTOPage(Page):
             self.player.participant.vars['gto_time_stamp'] = now()
         leftover = self.player.participant.vars['gto_time_stamp'] + gto_seconds - now()
         expiration_time = self.player.participant.vars['gto_time_stamp'] + gto_seconds
-        # timeout = 60 if self.player.gender == 'Male' else 30
-        # expiration_time = current_time + timeout
         timeout, created = PageTimeout.objects.get_or_create(
             participant=self.participant,
             page_index=self.participant._index_in_pages,
@@ -63,11 +61,7 @@ class GTOPage(Page):
         return True and self.gto_is_displayed()
 
     def before_next_page(self):
-        if not self.is_last():
-            ...
-
-        else:
-
+        if  self.is_last():
             del self.player.participant.vars['gto_time_stamp']
 
     def vars_for_template(self):

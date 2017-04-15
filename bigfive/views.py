@@ -7,6 +7,7 @@ from otree.models_concrete import (PageTimeout, PageCompletion)
 
 from .gto_timeout_page import GTOPage
 
+
 class Intro(Page):
     timeout_seconds = 100
 
