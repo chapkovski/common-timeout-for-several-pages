@@ -3,13 +3,10 @@ from . import models, views
 from ._builtin import Page, WaitPage
 from .models import Constants
 import time
+from otree.models_concrete import PageTimeout
 
-# setting some default values if they are missing in Constants
-if hasattr(Constants, 'GTO_in_round'):
-    GTO_in_round = Constants.GTO_in_round
-else:
-    GTO_in_round = True
 
+# setting default values if they are missing in Constants
 if hasattr(Constants, 'gto_seconds'):
     gto_seconds = Constants.gto_seconds
 else:
@@ -52,29 +49,31 @@ class GTOPage(Page):
         return self.get_sequence()[self.get_index_in_sequence()+1]
 
     def is_displayed(self):
-        if 'gto_time_stamp' in self.player.participant.vars:
-            leftover = self.player.participant.vars['gto_time_stamp'] + gto_seconds - now()
-            if self.is_first() and not GTO_in_round:
-                self.timeout_seconds = leftover
-            if leftover < 1:
-                return False
         if self.is_first() and 'gto_time_stamp' not in self.player.participant.vars:
             self.player.participant.vars['gto_time_stamp'] = now()
+        leftover = self.player.participant.vars['gto_time_stamp'] + gto_seconds - now()
+        expiration_time = self.player.participant.vars['gto_time_stamp'] + gto_seconds
+        # timeout = 60 if self.player.gender == 'Male' else 30
+        # expiration_time = current_time + timeout
+        timeout, created = PageTimeout.objects.get_or_create(
+            participant=self.participant,
+            page_index=self.participant._index_in_pages,
+            defaults={'expiration_time': expiration_time})
+
         return True and self.gto_is_displayed()
 
     def before_next_page(self):
         if not self.is_last():
-            leftover = self.player.participant.vars['gto_time_stamp'] + gto_seconds - now()
-            self.next_in_sequence().timeout_seconds = leftover
-        else:
-            if GTO_in_round:
-                del self.player.participant.vars['gto_time_stamp']
+            ...
 
+        else:
+
+            del self.player.participant.vars['gto_time_stamp']
 
     def vars_for_template(self):
         if self.general_timeout:
             gto_dict = {'gto': self.general_timeout,
-                        'GTO_in_round': GTO_in_round}
+                        }
             if self.gto_vars_for_template():
                 gto_dict.update(self.gto_vars_for_template())
             return gto_dict

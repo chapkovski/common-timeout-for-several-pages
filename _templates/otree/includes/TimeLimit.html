@@ -3,7 +3,7 @@
 
 {% if gto %}
 <div id="otree-timeout" class="alert alert-warning" style="display:none;">
-    <p>Time left to complete this {% if GTO_in_round and Constants.num_rounds > 1  %}round{% else %}study{% endif %}:
+    <p>Time left to complete this {% if Constants.num_rounds > 1  %}round{% else %}study{% endif %}:
       {% load i18n %}
         <span style="font-weight: bold">
             <span class="glyphicon glyphicon-time"></span>
