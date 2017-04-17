@@ -14,8 +14,11 @@ Timeout for several pages at the same time
 class Constants(BaseConstants):
     name_in_url = 'bigfive'
     players_per_group = None
-    num_rounds = 1
-    gto_seconds = 100
+    num_rounds = 100
+    gto_seconds = 20  # the length of a common timeout
+    overallrounds = True  # set it to True if you need to have a common timeout
+    #  for all rounds. Otherwise the commont timeout will apply only to the
+    # set of GTOPages in one round only and it will restart at the next round
 
 
 class Subsession(BaseSubsession):

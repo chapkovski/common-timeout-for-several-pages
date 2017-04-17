@@ -43,9 +43,9 @@ class Results(Page):
 
 
 page_sequence = [
-    Intro,
+    # Intro,
     Demographics,
-    BigFive,
-    ThirdPage,
-    Results,
+    # BigFive,
+    # ThirdPage,
+    # Results,
 ]

@@ -10,6 +10,16 @@ class Constants(BaseConstants):
     ...
     gto_seconds = 100
 ```
+By default the commont timeout will apply only to the
+ set of GTOPages in one round only and it will restart at the next round.
+ If you need to have your common timeout for all rounds, set `overallrounds`
+ variable in `models.py: Constants` to true:
+ ```python
+ class Constants(BaseConstants):
+     ...
+     gto_seconds = 100
+     overallrounds = True
+ ```
 
 If you forget to set it, then by default the general timeout will be 600 seconds.
 

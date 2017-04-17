@@ -12,6 +12,10 @@ if hasattr(Constants, 'gto_seconds'):
 else:
     gto_seconds = 600
 
+if hasattr(Constants, 'overallrounds'):
+    overallrounds = Constants.overallrounds
+else:
+    overallrounds = False
 
 def now():
     return int(time.time())
@@ -31,8 +35,7 @@ class GTOPage(Page):
         p_in_gen_timeout = self.get_sequence()
         if type(self) in p_in_gen_timeout:
             index_in_gto = p_in_gen_timeout.index(type(self))
-            if index_in_gto == len(p_in_gen_timeout)-1:
-                return 'Last'
+            seqlen = len(p_in_gen_timeout)
             return index_in_gto
 
     def is_first(self):
@@ -42,7 +45,7 @@ class GTOPage(Page):
             return False
 
     def is_last(self):
-        if self.get_index_in_sequence() == 'Last':
+        if self.get_index_in_sequence() == len(self.get_sequence()) - 1:
             return True
 
 
@@ -54,11 +57,11 @@ class GTOPage(Page):
             participant=self.participant,
             page_index=self.participant._index_in_pages,
             defaults={'expiration_time': expiration_time})
-
-        return True and self.gto_is_displayed()
+        to_display = expiration_time > now()
+        return to_display and self.gto_is_displayed()
 
     def before_next_page(self):
-        if  self.is_last():
+        if not overallrounds and self.is_last():
             del self.player.participant.vars['gto_time_stamp']
 
     def vars_for_template(self):
