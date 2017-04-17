@@ -41,12 +41,12 @@ class GTOPage(Page):
     def is_first(self):
         if self.get_index_in_sequence() == 0:
             return True
-        else:
-            return False
+        return False
 
     def is_last(self):
         if self.get_index_in_sequence() == len(self.get_sequence()) - 1:
             return True
+        return False
 
 
     def is_displayed(self):
@@ -67,7 +67,7 @@ class GTOPage(Page):
     def vars_for_template(self):
         if self.general_timeout:
             gto_dict = {'gto': self.general_timeout,
-                        }
+                        'overallrounds':overallrounds}
             if self.gto_vars_for_template():
                 gto_dict.update(self.gto_vars_for_template())
             return gto_dict
