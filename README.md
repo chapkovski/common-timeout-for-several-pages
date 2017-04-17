@@ -21,7 +21,8 @@ By default the commont timeout will apply only to the
      overallrounds = True
  ```
 
-If you forget to set it, then by default the general timeout will be 600 seconds.
+If you forget to set these variables, then by default the general timeout will
+be 600 seconds and by default it will valid for one round only.
 
 in `views.py` you should first import `GTOPage`:
 ``` python
